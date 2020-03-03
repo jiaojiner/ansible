@@ -1,0 +1,12 @@
+---
+- hosts: ansible
+  gather_facts: no
+  
+  roles:
+    - role: common
+    - role: nginx
+      vars:
+        dir: /opt/a
+        app_port: 80
+      tags: nginx
+    - role: php

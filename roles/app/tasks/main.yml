@@ -1,0 +1,7 @@
+- include: group.yml
+- include: user.yml
+- include: yum.yml
+- include: teml.yml
+- include: file.yml
+- include: start.yml
+

@@ -1,0 +1,12 @@
+---
+- hosts: ansible
+  gather_facts: no
+  remote_user: root
+  vars:
+    - work_dir: /usr/local
+    - nginx_version: 1.15
+  tasks:
+  - name: test var
+    debug: msg="{{ work_dir }}/nginx{{nginx_version}}"
+  - name: crteate dir
+    shell: mkdir "{{work_dir}}/nginx{{nginx_version}}"

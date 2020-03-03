@@ -1,0 +1,13 @@
+---
+- hosts: ansible
+  gather_facts: no
+  remote_user: root
+  
+  tasks:
+  - name: register var
+    command: date +"%F_%T"
+    register: datetime  #注册变量--将date得到的时间赋值到datetime中
+
+  - name: touch file
+    debug: msg={{datetime}}
+    #file: dest=/tmp/{{ datetime.stdout }} state=touch

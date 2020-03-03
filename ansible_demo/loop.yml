@@ -1,0 +1,14 @@
+---
+- hosts: ansible
+  gather_facts: no
+  tasks:
+    - name: loop
+      debug: msg="{{item}}"
+      with_list:
+        - one
+        - two
+    - name: loop
+      user: name={{item.name}} groups={{item.groups}}
+      loop:
+        - {name: 'test3', groups: 'root'}
+        - {name: 'test4', groups: 'root'}

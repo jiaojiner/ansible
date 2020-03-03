@@ -1,0 +1,2 @@
+- name: copy file
+  copy: src=vhost.conf dest=/tmp  owner=app

@@ -1,0 +1,8 @@
+---
+- hosts: ansible
+  gather_facts: yes
+  remote_user: root
+
+  tasks:
+  - name: touch file
+    file: dest=/tmp/{{ansible_hostname}} state=touch #系统变量可以使用setup模块查看

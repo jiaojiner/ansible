@@ -1,0 +1,49 @@
+---
+- hosts: ansible
+  gather_facts: yes
+  vars:
+    hello: Ansible
+
+  tasks:
+    - name: Install gcc pcre openssl
+      yum: name={{item}} state=present
+      loop:
+         - gcc
+         - pcre-devel
+         - zlib-devel
+         - openssl
+         - openssl-devel
+      tags: depend
+
+    - name: wget nginx
+      shell: wget https://nginx.org/download/nginx-1.9.9.tar.gz 
+      tags: wget 
+
+    - name: make
+      shell: tar -zxvf nginx-1.9.9.tar.gz && cd nginx-1.9.9 && ./configure --prefix=/etc/nginx && make && make install
+      tags: make
+
+    - name: Copy nginx configuration file
+      copy:
+        src: ./site.conf
+        dest: /etc/nginx/conf.d/site.conf
+      tags: copy
+
+    - name: Start nginx
+      service: 
+         name: nginx
+         state: started
+      tags: start
+
+    - name: Create wwwroot directory
+      file: 
+         dest: /var/www/html
+         state: directory
+      tags: create
+
+    - name: Create test page index.html
+      shell: 
+         echo "hello {{hello}}" > /var/www/html/index.html
+      tags: page     
+...
+

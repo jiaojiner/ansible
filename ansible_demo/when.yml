@@ -1,0 +1,8 @@
+---
+- hosts: ansible
+  gather_facts: yes
+
+  tasks:
+  - name: when ip=192.168.98.66 print 
+    debug: msg={{ansible_default_ipv4.address}}
+    when: ansible_default_ipv4.address == '192.168.98.66'

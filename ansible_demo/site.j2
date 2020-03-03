@@ -1,0 +1,14 @@
+{% set list=[10, 11, 12, 13, 14] %}
+upstream {{server_name}} {
+       {% for i in list %}
+       server 192.168.98.{{i}}
+       {% endfor %}
+}
+server {
+   listen {{http_port}};
+   server_name {{server_name}};
+   location / {
+      root    /var/www/html;
+      index   index.html;
+    }
+}

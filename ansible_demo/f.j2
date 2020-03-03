@@ -1,0 +1,13 @@
+{% set list=['one', 'two'] %}
+{% for i in list %}
+   {% if i == 'two' %}
+        -> two
+   {% endif %}
+   {{i}}
+{% endfor %}
+hello {{hello}}
+
+{% set dict={'dict1': 1, 'dict2': 2} %}
+{% for key,value in dict.iteritems() %}
+    {{key}} -> {{value}}
+{% endfor %}

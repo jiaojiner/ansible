@@ -1,0 +1,2 @@
+- name: php task test
+  debug: msg="php task test --> {{dir}} -->{{app_port}}"
