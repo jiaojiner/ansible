@@ -1,0 +1,59 @@
+---
+- hosts: ios
+  gather_facts: no
+  remote_user: root
+  vars_files:
+    - creds.yml
+    - conf.yml
+  vars:
+    cred:
+      username: "{{ username }}"
+      password: "{{ password }}"
+
+  tasks:
+    - name: config interfaces
+      ios_config:
+        provider: "{{ cred }}"
+        lines:
+          - interface "{{ item.ip }}" 255.255.255.255
+        parents:
+          - interface "{{ item.port }}"
+      with_items: "{{ interfaces }}"
+      #debug: msg={{ item.router }}
+      when: (item.router == inventory_hostname)
+
+    - name: config acl
+      ios_config:
+        provider: "{{ cred }}"
+        lines:
+          - access-list 99 permit 1.1.1.1
+
+    - name: verify acl
+      ios_command:
+        provider: "{{ cred }}"
+        commands:
+          - sh access-l
+        waitfor:
+          - result[0] contains 'permit 1.1.1.1'
+
+    - name: config domain name
+      ios_system:
+        provider: "{{ cred }}"
+        domain_name: ansible.com
+        domain_search:
+          - 'ansible1.com'
+          - 'ansible2.com'
+          - 'ansible3.com'
+
+    - name: config name server
+      ios_config:
+        provider: "{{ cred }}"
+        name_servers:
+          - 8.8.8.8
+          - 114.114.114.114
+
+    - name: save congif
+      ios_config:
+        provider: "{{ cred }}"
+        save_when: modified
+...

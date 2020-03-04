@@ -1,0 +1,34 @@
+---
+- hosts: ios
+  gather_facts: no
+  remote_user: root
+  vars_files:
+    - creds.yml
+    - mail.yml
+  vars:
+    cred:
+      username: "{{username}}"
+      password: "{{password}}"
+
+  tasks:
+    - name: check config change
+      ios_config:
+        provides: "{{cred}}"
+        diff_against: intended
+        intended_config: "{{lookup('file','config/{{inventory_hostname}}.cfg')}}"
+        register: config_change
+        
+    - name: mail changed
+      mail:
+        host: smtp.qq.com
+        port: 465
+        username: "{{mail}}"
+        password: "{{mailpass}}"
+        to: 15148365776@163.com
+        subject: ansible-report
+        body: "{{inventory_hostname}} has changed"
+      delegate_to: localhost
+      when: config_change.changed
+
+
+
